@@ -15,7 +15,7 @@ extern "C" {
 #include <qbluetoothaddress.h>
 
 BluetoothConnector::BluetoothConnector() :
-    rfcommServer(NULL), serviceInfo(NULL), clientSockets(NULL)
+    rfcommServer(NULL), serviceInfo(), clientSockets()
 {}
 
 BluetoothConnector::~BluetoothConnector()
