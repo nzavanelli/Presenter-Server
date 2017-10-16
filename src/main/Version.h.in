@@ -1,0 +1,14 @@
+/**
+ * Version.h.in
+ *
+ *  Created on: 14.07.2017
+ *      Author: Felix Wohlfrom
+ *
+ *  This file is used to define the version number in a central way
+ */
+#define VERSION_MAJOR @VERSION_MAJOR@
+#define VERSION_MINOR @VERSION_MINOR@
+
+#if @VERSION_BETA@
+    #define VERSION_BETA @VERSION_BETA@
+#endif
