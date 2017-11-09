@@ -30,7 +30,7 @@
 
 #include <QMainWindow>
 
-#include "../connector/bluetooth/BluetoothConnectorBase.h"
+#include "../connector/bluetooth/BluetoothConnector.h"
 
 namespace Ui {
     class MainWindow;
@@ -120,7 +120,7 @@ class MainWindow : public QMainWindow
         /**
          * The bluetooth connector class. Will create the bluetooth server.
          */
-        BluetoothConnectorBase* btConnector;
+        BluetoothConnector* btConnector;
 
         /**
          * The action to open our log window.

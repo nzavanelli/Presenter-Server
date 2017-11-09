@@ -6,6 +6,7 @@ SET(SOURCE
 
 SET(HEADERS
     BluetoothConnectorBase.h
+    BluetoothConnector.h
     key_sender.h
 )
 
