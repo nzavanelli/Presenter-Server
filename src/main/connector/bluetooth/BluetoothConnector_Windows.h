@@ -23,8 +23,8 @@
  *      Author: Felix Wohlfrom
  */
 
-#ifndef SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_WINDOWS_H_
-#define SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_WINDOWS_H_
+#ifndef SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_WINDOWS_H_
+#define SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_WINDOWS_H_
 
 #include "BluetoothConnectorBase.h"
 
@@ -196,4 +196,4 @@ class BluetoothConnector: public BluetoothConnectorBase
         void lineReceived(const QString &name, const QString &line);
 };
 
-#endif /* SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_WINDOWS_H_ */
+#endif /* SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_WINDOWS_H_ */

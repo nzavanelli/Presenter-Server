@@ -1,33 +1,13 @@
-# Build all files in this directory
-SET(SOURCE
-    BluetoothConnectorBase.cpp
-    key_sender.c
-)
+# The subdirectories to build
+set(SUBDIRS bluetooth)
 
-SET(HEADERS
-    BluetoothConnectorBase.h
-    key_sender.h
-)
-
-if (WIN32)
-    set(SOURCE ${SOURCE} BluetoothConnector_Windows.cpp)
-    set(HEADERS ${HEADERS} BluetoothConnector_Windows.h)
-endif(WIN32)
-
-if (UNIX)
-    set(SOURCE ${SOURCE} BluetoothConnector_Linux.cpp)
-    set(HEADERS ${HEADERS} BluetoothConnector_Linux.h)
-    
-    find_package(Qt5Bluetooth REQUIRED)
-endif(UNIX)
+# Build subdirs and include for build
+foreach(SUB ${SUBDIRS})
+    include_directories(${SUB})
+    link_directories(${PROJECT_BINARY_DIR}/${SUB})
+    add_subdirectory(${SUB})
+endforeach(SUB)
 
 source_group("Header Files" FILES ${HEADERS})
-
 add_library(Connectors ${SOURCE} ${HEADERS})
-
-if (WIN32)
-    target_link_libraries(Connectors Qt5::Core wsock32 ws2_32)
-endif(WIN32)
-if (UNIX)
-    target_link_libraries(Connectors Qt5::Bluetooth)
-endif(UNIX)
+target_link_libraries(Connectors BluetoothConnector)

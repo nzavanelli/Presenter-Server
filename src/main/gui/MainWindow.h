@@ -30,7 +30,7 @@
 
 #include <QMainWindow>
 
-#include "../connector/BluetoothConnectorBase.h"
+#include "../connector/bluetooth/BluetoothConnectorBase.h"
 
 namespace Ui {
     class MainWindow;

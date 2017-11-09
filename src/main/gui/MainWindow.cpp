@@ -29,10 +29,10 @@
 #include "AboutWindow.h"
 
 #ifdef _WIN32
-    #include "../connector/BluetoothConnector_Windows.h"
+    #include "../connector/bluetooth/BluetoothConnector_Windows.h"
 #endif // _WIN32
 #ifdef __linux__
-    #include "../connector/BluetoothConnector_Linux.h"
+    #include "../connector/bluetooth/BluetoothConnector_Linux.h"
 #endif // __linux__
 
 #include <QIcon>

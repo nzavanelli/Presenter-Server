@@ -23,8 +23,8 @@
  *      Author: Felix Wohlfrom
  */
 
-#ifndef SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_H_
-#define SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_H_
+#ifndef SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTORBASE_H_
+#define SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTORBASE_H_
 
 #include <QObject>
 #include <QString>
@@ -107,4 +107,4 @@ class BluetoothConnectorBase: public QObject
         void keySent(const QString &name, const QString &key);
 };
 
-#endif /* SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_H_ */
+#endif /* SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTORBASE_H_ */

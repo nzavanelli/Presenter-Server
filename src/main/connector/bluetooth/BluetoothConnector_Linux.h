@@ -23,16 +23,15 @@
  *      Author: Felix Wohlfrom
  */
 
-#ifndef SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_LINUX_H_
-#define SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_LINUX_H_
-
-#include "BluetoothConnectorBase.h"
+#ifndef SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_LINUX_H_
+#define SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_LINUX_H_
 
 #include <QList>
 
 #include <qbluetoothserviceinfo.h>
 #include <qbluetoothserver.h>
 #include <qbluetoothsocket.h>
+#include "BluetoothConnectorBase.h"
 
 /**
  * The windows specific implementation of BluetoothConnectorBase.
@@ -99,4 +98,4 @@ class BluetoothConnector: public BluetoothConnectorBase
         QList<QBluetoothSocket*> clientSockets;
 };
 
-#endif /* SRC_MAIN_CONNECTOR_BLUETOOTHCONNECTORBASE_LINUX_H_ */
+#endif /* SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_LINUX_H_ */
