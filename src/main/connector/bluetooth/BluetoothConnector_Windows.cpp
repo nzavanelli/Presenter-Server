@@ -25,8 +25,8 @@
 
 #include "BluetoothConnector_Windows.h"
 
-#include <QCoreApplication>
 #include <QSettings>
+#include <QCoreApplication>
 
 #include <stdio.h>
 #include <initguid.h>
@@ -242,24 +242,57 @@ QString BluetoothConnector::getLastWSAError()
     return error;
 }
 
+void BluetoothConnector::write(const QString& message)
+{
+    emit info(QString("Write: %1").arg(message));
+
+    QByteArray bytes = message.toUtf8();
+
+    int lengthWritten = 0;
+    int lengthToWrite = bytes.size();
+    const char* writeBuffer = bytes.data();
+
+    SOCKET clientSocket = readerThread->getClientSocket();
+
+    while (lengthWritten < lengthToWrite)
+    {
+        int length = send(clientSocket,
+                writeBuffer + lengthWritten,
+                lengthToWrite - lengthWritten,
+                0);
+
+        if (length == SOCKET_ERROR)
+        {
+            emit error(QString("Writing command failed. %1\n")
+                    .arg(BluetoothConnector::getLastWSAError()));
+            QCoreApplication::processEvents();
+            return;
+        }
+        else
+        {
+            lengthWritten += length;
+        }
+    }
+}
+
 void BluetoothConnector::errorThread(const QString &error)
 {
-    emit BluetoothConnectorBase::error(error);
+    emit RemoteControl::error(error);
 }
 
 void BluetoothConnector::clientConnectedThread(const QString &name)
 {
-    emit BluetoothConnectorBase::clientConnected(name);
+    handleClientConnected(name);
 }
 
 void BluetoothConnector::clientDisconnectedThread()
 {
-    emit BluetoothConnectorBase::clientDisconnected();
+    emit RemoteControl::clientDisconnected();
 }
 
 void BluetoothConnector::lineReceived(const QString &name, const QString &line)
 {
-    handleKey(name, line);
+    handleLine(name, line);
 }
 
 BluetoothReaderThread::BluetoothReaderThread(const SOCKET serverSocket) :
@@ -270,6 +303,11 @@ BluetoothReaderThread::BluetoothReaderThread(const SOCKET serverSocket) :
 void BluetoothReaderThread::stop()
 {
     keepRunning = false;
+}
+
+SOCKET BluetoothReaderThread::getClientSocket()
+{
+    return clientSocket;
 }
 
 void BluetoothReaderThread::run()
@@ -339,23 +377,15 @@ void BluetoothReaderThread::run()
                 default:
                     readBuffer[lengthReceived] = '\0'; // NULL terminate string
                     receivedLine.append(readBuffer);
-                    for (int i = receivedLine.length() - 1; i > 0; i--)
+                    int newLineIndex = receivedLine.indexOf('\n');
+                    while (newLineIndex > -1)
                     {
-                        if (receivedLine[i] == '\n')
-                        {
-                            emit lineReceived(clientName, receivedLine.left(i));
-                            QCoreApplication::processEvents();
+                        emit lineReceived(clientName, receivedLine.left(newLineIndex));
+                        QCoreApplication::processEvents();
 
-                            if (i == receivedLine.length() - 1)
-                            {
-                                receivedLine = "";
-                            }
-                            else
-                            {
-                                receivedLine = receivedLine.mid(i + 1);
-                            }
-                            break;
-                        }
+                        receivedLine = receivedLine.mid(newLineIndex + 1);
+
+                        newLineIndex = receivedLine.indexOf('\n');
                     }
                     break;
             }

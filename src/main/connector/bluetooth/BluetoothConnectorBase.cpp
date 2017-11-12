@@ -25,26 +25,13 @@
 
 #include "BluetoothConnectorBase.h"
 
-extern "C" {
-    #include "key_sender.h"
-}
-
-BluetoothConnectorBase::~BluetoothConnectorBase()
-{
-    // Empty default destructor
-};
-
-void BluetoothConnectorBase::handleKey(const QString& sender, const QString& key)
-{
-    if (key == tr("nextSlide"))
-    {
-        send_next();
-    }
-    else if (key == tr("prevSlide"))
-    {
-        send_prev();
-    }
-
-    emit keySent(sender, key);
-}
-
+// This uuid needs to be the same for all clients that want to connect to our
+// service
+const QString BluetoothConnectorBase::serviceUuid
+    = "be71c255-8349-4d86-b09e-7983c035a191";
+const QString BluetoothConnectorBase::serviceName
+    = "PresenterService";
+const QString BluetoothConnectorBase::serviceDescription
+    = "A presenter service to remote control presentations from mobile devices";
+const QString BluetoothConnectorBase::serviceProvider
+    = "Felix Wohlfrom";

@@ -131,7 +131,8 @@ void BluetoothConnector::clientConnected()
     connect(socket, SIGNAL(readyRead()), this, SLOT(readSocket()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(clientDisconnected()));
     clientSockets.append(socket);
-    emit BluetoothConnectorBase::clientConnected(socket->peerName());
+
+    handleClientConnected(socket->peerName());
 }
 
 void BluetoothConnector::clientDisconnected()
@@ -143,7 +144,7 @@ void BluetoothConnector::clientDisconnected()
         return;
     }
 
-    emit BluetoothConnectorBase::clientDisconnected();
+    emit RemoteControl::clientDisconnected();
 
     clientSockets.removeOne(socket);
     socket->deleteLater();
@@ -158,10 +159,26 @@ void BluetoothConnector::readSocket()
         return;
     }
 
-    while (socket->canReadLine()) {
+    while (socket->canReadLine())
+    {
         QByteArray line = socket->readLine().trimmed();
-        handleKey(socket->peerName(),
+        handleLine(socket->peerName(),
                   QString::fromUtf8(line.constData(), line.length()));
     }
 }
 
+void BluetoothConnector::write(const QString& message)
+{
+    emit info(QString("Write: %1").arg(message));
+
+    for (QBluetoothSocket* socket: clientSockets)
+    {
+        QByteArray messageToSend(message.toUtf8());
+        int bytesSent = 0;
+        while (bytesSent < messageToSend.length()) {
+            int sent = socket->write(messageToSend);
+            messageToSend = messageToSend.mid(sent);
+            bytesSent += sent;
+        }
+    }
+}

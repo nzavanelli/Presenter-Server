@@ -56,6 +56,13 @@ class BluetoothReaderThread: public QThread
          */
         void stop();
 
+        /**
+         * Returns the client socket we are currently connected to.
+         *
+         * @return The client socket.
+         */
+        SOCKET getClientSocket();
+
     signals:
         /**
          * Signals an error.
@@ -166,6 +173,13 @@ class BluetoothConnector: public BluetoothConnectorBase
          * The thread that will read the data received by our server socket.
          */
         BluetoothReaderThread* readerThread;
+
+        /**
+         * Write a given message to the connected client.
+         *
+         * @param message The message to write.
+         */
+        void write(const QString& message);
 
    private slots:
         /**

@@ -96,6 +96,13 @@ class BluetoothConnector: public BluetoothConnectorBase
          * The connected clients.
          */
         QList<QBluetoothSocket*> clientSockets;
+
+        /**
+         * Write a given message to the connected client.
+         *
+         * @param message The message to write.
+         */
+        void write(const QString& message);
 };
 
 #endif /* SRC_MAIN_CONNECTOR_BLUETOOTH_BLUETOOTHCONNECTOR_LINUX_H_ */
