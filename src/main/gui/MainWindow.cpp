@@ -142,7 +142,8 @@ void MainWindow::showAboutScreen()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (trayIcon->isVisible()) {
+    if (QSystemTrayIcon::isSystemTrayAvailable()
+            && trayIcon->isVisible()) {
         if (trayIcon->supportsMessages()) {
             trayIcon->showMessage(tr("Presenter"),
                                  tr("The program will keep running in the "
@@ -160,6 +161,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
         }
 
         hide();
+        event->ignore();
+
+    } else {
+        showMinimized();
         event->ignore();
     }
 }

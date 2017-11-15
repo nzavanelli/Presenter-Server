@@ -64,13 +64,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    if (!QSystemTrayIcon::isSystemTrayAvailable()) {
-        QMessageBox::critical(0, QObject::tr("Presenter"),
-                QObject::tr("System tray not detected on this system"));
-        return 1;
+    if (QSystemTrayIcon::isSystemTrayAvailable())
+    {
+      QApplication::setQuitOnLastWindowClosed(false);
     }
-
-    QApplication::setQuitOnLastWindowClosed(false);
 
     MainWindow window;
     window.show();
