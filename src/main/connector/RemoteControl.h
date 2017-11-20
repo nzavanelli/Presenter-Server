@@ -100,6 +100,11 @@ class RemoteControl: public QObject
         void error(const QString &message);
 
         /**
+         * Emitted once the server is ready to accept client connections.
+         */
+        void serverReady();
+
+        /**
          * Signals that a new client is now connected.
          *
          * @param name The name of the connected client

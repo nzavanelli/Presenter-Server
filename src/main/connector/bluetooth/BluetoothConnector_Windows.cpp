@@ -193,6 +193,7 @@ void BluetoothConnector::startServer()
     readerThread->start();
 
     emit info(tr("Server ready and waiting for connections"));
+    emit serverReady();
 }
 
 void BluetoothConnector::stopServer()

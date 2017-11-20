@@ -47,6 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
         icon = new QIcon(":/tray");
     #endif // __linux__
 
+    // Initialize the logger window
+    logger = new Logger(this);
+
     // Quit button can not be connected in ui, since we don't have qApp there
     connect(ui->action_Quit, SIGNAL(triggered()), qApp, SLOT(quit()));
 
@@ -61,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
                     this, SLOT(clientDisconnected()));
     connect(btConnector, SIGNAL(keySent(QString, QString)),
                     this, SLOT(keySent(QString, QString)));
+    connect(btConnector, SIGNAL(serverReady()),
+                    this, SLOT(serverReady()));
 
     btConnector->startServer();
 
@@ -86,38 +91,62 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->setIcon(*icon);
     setWindowIcon(*icon);
     trayIcon->show();
+
+    // Set minimum witdh for info labels
+    ui->bluetoothSocketLabel->setMinimumWidth(
+            ui->bluetoothSocketLabel->fontMetrics()
+                .boundingRect(ui->bluetoothSocketLabel->text())
+                .width());
+    ui->bluetoothSocketStatus->setMinimumWidth(
+            ui->bluetoothSocketStatus->fontMetrics()
+                .boundingRect(tr("Error, see log for Details"))
+                .width());
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete icon;
+    delete logger;
     delete btConnector;
 }
 
 void MainWindow::info(const QString &message)
 {
-    ui->logger->append(message);
+    logger->append(message);
+}
+
+void MainWindow::serverReady()
+{
+    ui->bluetoothSocketStatus->setText(
+                QString("<font color=\"#0b0\">%1</font>").arg(tr("Ready")));
 }
 
 void MainWindow::error(const QString &message)
 {
-    ui->logger->append(QString("<font color=\"#a33\">%1</font>").arg(message));
+    logger->append(QString("<font color=\"#a33\">%1</font>").arg(message));
+    ui->bluetoothSocketStatus->setText(
+            QString("<font color=\"#a33\">%1</font>")
+                .arg(tr("Error, see log for Details")));
 }
 
 void MainWindow::clientConnected(const QString &name)
 {
-    ui->logger->append(tr("Connected: %1").arg(name));
+    logger->append(tr("Connected: %1").arg(name));
+    ui->bluetoothSocketStatus->setText(
+                QString("<font color=\"#0b0\">%1</font>").arg(tr("Connected")));
 }
 
 void MainWindow::clientDisconnected()
 {
-    ui->logger->append(tr("Disconnected."));
+    logger->append(tr("Disconnected."));
+    ui->bluetoothSocketStatus->setText(
+                QString("<font color=\"#0b0\">%1</font>").arg(tr("Ready")));
 }
 
 void MainWindow::keySent(const QString &sender, const QString &key)
 {
-    ui->logger->append(tr("Key press, sender %1: %2").arg(sender, key));
+    logger->append(tr("Key press, sender %1: %2").arg(sender, key));
 }
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
@@ -135,6 +164,14 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+void MainWindow::showLog()
+{
+    if (!logger->isVisible())
+    {
+        logger->setVisible(true);
+    }
+}
+
 void MainWindow::showAboutScreen()
 {
     AboutWindow(this).exec();
@@ -143,8 +180,10 @@ void MainWindow::showAboutScreen()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (QSystemTrayIcon::isSystemTrayAvailable()
-            && trayIcon->isVisible()) {
-        if (trayIcon->supportsMessages()) {
+            && trayIcon->isVisible())
+    {
+        if (trayIcon->supportsMessages())
+        {
             trayIcon->showMessage(tr("Presenter"),
                                  tr("The program will keep running in the "
                                     "system tray. To terminate the program, "
@@ -163,7 +202,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
         hide();
         event->ignore();
 
-    } else {
+    }
+    else
+    {
         showMinimized();
         event->ignore();
     }

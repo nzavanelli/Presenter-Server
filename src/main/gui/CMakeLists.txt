@@ -1,10 +1,12 @@
 # Build all files in this directory
 SET(SOURCE
+    Logger.cpp
     MainWindow.cpp
     AboutWindow.cpp
 )
 
 SET(HEADERS
+    Logger.h
     MainWindow.h
     AboutWindow.h
 )

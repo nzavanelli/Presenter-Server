@@ -105,6 +105,7 @@ void BluetoothConnector::startServer()
     init_keysender();
 
     emit info(tr("Server ready and waiting for connections"));
+    emit serverReady();
 }
 
 void BluetoothConnector::stopServer()

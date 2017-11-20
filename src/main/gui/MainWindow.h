@@ -30,6 +30,8 @@
 
 #include <QMainWindow>
 
+#include "Logger.h"
+
 #include "../connector/bluetooth/BluetoothConnector.h"
 
 namespace Ui {
@@ -73,11 +75,16 @@ class MainWindow : public QMainWindow
         void info(const QString &message);
 
         /**
-         * Called if an error happened during server initialisation.
+         * Called if an error happened during server initialization.
          *
          * @param message The error message to display
          */
         void error(const QString &message);
+
+        /**
+         * Called once a server is ready to accept connections.
+         */
+        void serverReady();
 
         /**
          * Called if a new client connected.
@@ -107,6 +114,11 @@ class MainWindow : public QMainWindow
         void iconActivated(QSystemTrayIcon::ActivationReason reason);
 
         /**
+         * Called on clicks on the "show log" menu item.
+         */
+        void showLog();
+
+        /**
          * Called on clicks on "info" menu item
          */
         void showAboutScreen();
@@ -116,6 +128,11 @@ class MainWindow : public QMainWindow
          * The main window ui.
          */
         Ui::MainWindow* ui;
+
+        /**
+         * The logger window.
+         */
+        Logger* logger;
 
         /**
          * The bluetooth connector class. Will create the bluetooth server.
