@@ -26,6 +26,7 @@ find_package(Qt5Widgets REQUIRED)
 
 # Set compiler flags on g++
 if(CMAKE_COMPILER_IS_GNUCXX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -s")
     # Here the -D_DEBUG is needed because it's not set under cmake in ubuntu
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_DEBUG -ggdb -Wall -Wextra -O0 -fprofile-arcs -ftest-coverage")
