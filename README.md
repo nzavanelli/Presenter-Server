@@ -8,8 +8,7 @@ A reference client for android can be found [here](https://github.com/FelixWohlf
 
 The following systems are currently supported:
 - Windows 10
+- Ubuntu 16.04 LTS
 - Ubuntu 17.10 using an Xorg based window manager (tested on kde5 and gnome)
   - Unfortunately the qt5 bluetooth seems to require root access
     to communicate with the bluetooth devices
-
-Currently the user interface is quite limited and mainly for demonstration purpose, but for the future it is planned to have a more user friendly interface.
