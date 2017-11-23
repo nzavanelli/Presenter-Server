@@ -2,13 +2,21 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>235</width>
+    <height>58</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Presenter Server</string>
   </property>
   <widget class="QWidget" name="mainWidget">
    <layout class="QGridLayout" name="mainLayout">
     <item row="0" column="1">
-     <widget class="QLabel" name="bluetoothSocketStatus">
+     <widget class="QLabel" name="bluetoothServerStatus">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -31,7 +39,7 @@
      </widget>
     </item>
     <item row="0" column="0">
-     <widget class="QLabel" name="bluetoothSocketLabel">
+     <widget class="QLabel" name="bluetoothServerLabel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -46,7 +54,7 @@
        </font>
       </property>
       <property name="text">
-       <string>Bluetooth Socket Status:</string>
+       <string>Bluetooth Server Status:</string>
       </property>
      </widget>
     </item>

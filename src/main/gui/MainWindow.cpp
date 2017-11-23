@@ -93,12 +93,12 @@ MainWindow::MainWindow(QWidget *parent) :
     trayIcon->show();
 
     // Set minimum witdh for info labels
-    ui->bluetoothSocketLabel->setMinimumWidth(
-            ui->bluetoothSocketLabel->fontMetrics()
-                .boundingRect(ui->bluetoothSocketLabel->text())
+    ui->bluetoothServerStatus->setMinimumWidth(
+            ui->bluetoothServerStatus->fontMetrics()
+                .boundingRect(ui->bluetoothServerStatus->text())
                 .width());
-    ui->bluetoothSocketStatus->setMinimumWidth(
-            ui->bluetoothSocketStatus->fontMetrics()
+    ui->bluetoothServerStatus->setMinimumWidth(
+            ui->bluetoothServerStatus->fontMetrics()
                 .boundingRect(tr("Error, see log for Details"))
                 .width());
 }
@@ -118,14 +118,14 @@ void MainWindow::info(const QString &message)
 
 void MainWindow::serverReady()
 {
-    ui->bluetoothSocketStatus->setText(
+    ui->bluetoothServerStatus->setText(
                 QString("<font color=\"#0b0\">%1</font>").arg(tr("Ready")));
 }
 
 void MainWindow::error(const QString &message)
 {
     logger->append(QString("<font color=\"#a33\">%1</font>").arg(message));
-    ui->bluetoothSocketStatus->setText(
+    ui->bluetoothServerStatus->setText(
             QString("<font color=\"#a33\">%1</font>")
                 .arg(tr("Error, see log for Details")));
 }
@@ -133,14 +133,14 @@ void MainWindow::error(const QString &message)
 void MainWindow::clientConnected(const QString &name)
 {
     logger->append(tr("Connected: %1").arg(name));
-    ui->bluetoothSocketStatus->setText(
+    ui->bluetoothServerStatus->setText(
                 QString("<font color=\"#0b0\">%1</font>").arg(tr("Connected")));
 }
 
 void MainWindow::clientDisconnected()
 {
     logger->append(tr("Disconnected."));
-    ui->bluetoothSocketStatus->setText(
+    ui->bluetoothServerStatus->setText(
                 QString("<font color=\"#0b0\">%1</font>").arg(tr("Ready")));
 }
 
