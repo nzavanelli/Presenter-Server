@@ -66,11 +66,7 @@ void RemoteControl::handleMessage(const QString& sender, const QString& message)
 
     QJsonDocument document = QJsonDocument::fromJson(message.toUtf8());
 
-    if (document.object()["type"].toString() == tr("version"))
-    {
-        // TODO Handle version properly, currently we accept all events
-    }
-    else if (document.object()["type"].toString() == tr("command"))
+    if (document.object()["type"].toString() == tr("command"))
     {
         QString command = document.object()["data"].toString();
         if (command == tr("nextSlide"))
