@@ -8,8 +8,8 @@ services:
   - docker
 
 before_install:
-  - docker pull ubuntu:16.10
-  - docker run -w /root --name test -d ubuntu:16.10 sleep infinity
+  - docker pull ubuntu:17.10
+  - docker run -w /root --name test -d ubuntu:17.10 sleep infinity
   - docker cp . test:/root/
 
 install:
