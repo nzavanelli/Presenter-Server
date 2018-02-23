@@ -21,7 +21,7 @@ endforeach(SUB)
 set(CMAKE_AUTORCC ON)
 set(RSRC res/images.qrc)
 if(WIN32)
-    set(RSRC ${RSRC} res/images/msw/msw.rc)
+    set(RSRC "${RSRC}" res/images/msw/msw.rc)
 endif(WIN32)
 
 # Generate the main program

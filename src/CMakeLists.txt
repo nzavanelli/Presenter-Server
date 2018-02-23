@@ -5,8 +5,7 @@ set(VERSION_MINOR 9)
 set(VERSION_BETA 1)
 
 # The subdirectories to build
-#set(SUBDIRS main test)
-set(SUBDIRS main)
+set(SUBDIRS main test)
 
 # Minimum cmake version
 cmake_minimum_required(VERSION 3.5.1)

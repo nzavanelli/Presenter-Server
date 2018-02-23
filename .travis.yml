@@ -19,4 +19,4 @@ install:
 script:
   - docker exec -t test bash -ic "mkdir build"
   - docker exec -t test bash -ic "cd build && cmake ../src && make"
-#  - docker exec -t test bash -ic "cd build && xvfb-run make test"
+  - docker exec -t test bash -ic "cd build && xvfb-run make test"
