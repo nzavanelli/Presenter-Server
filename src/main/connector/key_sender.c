@@ -98,7 +98,7 @@ void init_keysender()
         fdo = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
         if (fdo < 0)
         {
-            die("error: open");
+            die("error: open on /dev/uinput");
         }
 
         if (ioctl(fdo, UI_SET_EVBIT, EV_KEY) < 0)

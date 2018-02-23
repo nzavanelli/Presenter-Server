@@ -33,13 +33,16 @@ extern "C" {
 #include <qbluetoothaddress.h>
 
 BluetoothConnector::BluetoothConnector() :
-    rfcommServer(NULL), serviceInfo(), clientSockets()
+    rfcommServer(NULL), serviceInfo(), clientSockets(), keySenderInitialized(false)
 {}
 
 BluetoothConnector::~BluetoothConnector()
 {
     stopServer();
-    destroy_keysender();
+    if (keySenderInitialized)
+    {
+        destroy_keysender();
+    }
 }
 
 void BluetoothConnector::startServer()
@@ -103,6 +106,7 @@ void BluetoothConnector::startServer()
     serviceInfo.registerService(localAdapter);
 
     init_keysender();
+    keySenderInitialized = true;
 
     emit info(tr("Server ready and waiting for connections"));
     emit serverReady();
