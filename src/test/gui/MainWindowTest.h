@@ -50,7 +50,7 @@ class MainWindowTest: public QObject
         /**
          * The window instance to use for tests.
          */
-		MainWindow* mainWindow;
+        MainWindow* mainWindow;
 
     private slots:
         /**
