@@ -25,24 +25,16 @@
 
 #include "BluetoothConnector_Linux.h"
 
-extern "C" {
-    #include "key_sender.h"
-}
-
 #include <qbluetoothlocaldevice.h>
 #include <qbluetoothaddress.h>
 
 BluetoothConnector::BluetoothConnector() :
-    rfcommServer(NULL), serviceInfo(), clientSockets(), keySenderInitialized(false)
+    rfcommServer(NULL), serviceInfo(), clientSockets()
 {}
 
 BluetoothConnector::~BluetoothConnector()
 {
     stopServer();
-    if (keySenderInitialized)
-    {
-        destroy_keysender();
-    }
 }
 
 void BluetoothConnector::startServer()
@@ -104,9 +96,6 @@ void BluetoothConnector::startServer()
                              protocolDescriptorList);
 
     serviceInfo.registerService(localAdapter);
-
-    init_keysender();
-    keySenderInitialized = true;
 
     emit info(tr("Server ready and waiting for connections"));
     emit serverReady();

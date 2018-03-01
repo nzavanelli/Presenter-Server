@@ -1,0 +1,9 @@
+/**
+ * port.h.in
+ *
+ *  Created on: 26.02.2018
+ *      Author: Felix Wohlfrom
+ *
+ * Port configuration for key sender daemon on linux
+ */
+ #define KEYSENDER_PORT @KEYSENDER_PORT@

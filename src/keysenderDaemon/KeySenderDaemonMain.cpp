@@ -1,6 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Presenter. Server software to remote control a presentation.         *
- *  Copyright (C) 2017-2018 Felix Wohlfrom                               *
+ *  Copyright (C) 2018 Felix Wohlfrom                                    *
  *                                                                       *
  *  This program is free software: you can redistribute it and/or modify *
  *  it under the terms of the GNU General Public License as published by *
@@ -17,34 +17,53 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 /*
- * key_sender.h
+ * KeySenderDaemonMain.cpp
  *
- *  Created on: 13.08.2017
+ *  Created on: 24.02.2018
  *      Author: Felix Wohlfrom
  */
 
-#ifndef SRC_MAIN_CONNECTOR_KEY_SENDER_H_
-#define SRC_MAIN_CONNECTOR_KEY_SENDER_H_
+#include <QCoreApplication>
 
-#ifdef __linux__
-    /**
-      * Will initialize our key sender.
-      */
-    void init_keysender();
+#include "KeySenderDaemon.h"
 
-    /**
-     * Will destroy the key sender.
-     */
-    void destroy_keysender();
-#endif // __linux__
+#include <signal.h>
 
 /**
- * Will send the "next" key to the system.
+ * The signal handler. Gracefully closes our daemon.
  */
-void send_next();
+void handleShutDownSignal(int /* signalId */)
+{
+    QCoreApplication::exit(EXIT_SUCCESS);
+}
 
 /**
- * Will send the "previous" key to the system.
+ * Registers our handler for a given unix signal.
  */
-void send_prev();
-#endif /* SRC_MAIN_CONNECTOR_KEY_SENDER_H_ */
+void setShutDownSignal(int signalId)
+{
+    struct sigaction sa;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_handler = handleShutDownSignal;
+    if (sigaction(signalId, &sa, NULL) == -1)
+    {
+        perror("setting up termination signal");
+        exit(EXIT_FAILURE);
+    }
+}
+
+/**
+ * Main method of the keysender daemon.
+ */
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+
+    setShutDownSignal(SIGINT); // shut down on ctrl-c
+    setShutDownSignal(SIGTERM); // shut down on killall
+
+    // Start the key sender daemon
+    KeySenderDaemon sender;
+    return app.exec();
+}

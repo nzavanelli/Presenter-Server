@@ -71,6 +71,21 @@ if(APPLE)
     set(GUI_TYPE MACOSX_BUNDLE)
 endif(APPLE)
 
+# Linux specific settings. We need a key sender daemon running as priviledged
+# user to inject events
+if(UNIX)
+    # The network port to use for linux daemon.
+    # Stay above 1024 to allow usage without root if the user configured
+    # the access to the input device without root rights.
+    set(KEYSENDER_PORT 1111)
+
+    # Generate the port config header
+    configure_file("daemon_port.h.in" "${PROJECT_BINARY_DIR}/daemon_port.h")
+
+    # Build the daemon
+    set(SUBDIRS ${SUBDIRS} keysenderDaemon)
+endif(UNIX)
+
 # Build subdirs and include for build
 foreach(SUB ${SUBDIRS})
     include_directories(${SUB})

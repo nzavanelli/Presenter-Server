@@ -1,6 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Presenter. Server software to remote control a presentation.         *
- *  Copyright (C) 2017 Felix Wohlfrom                                    *
+ *  Copyright (C) 2017-2018 Felix Wohlfrom                               *
  *                                                                       *
  *  This program is free software: you can redistribute it and/or modify *
  *  it under the terms of the GNU General Public License as published by *
@@ -29,13 +29,16 @@
 #include <QJsonDocument>
 #include <QCoreApplication>
 
-extern "C" {
-    #include "key_sender.h"
+RemoteControl::RemoteControl()
+{
+    keySender = new KeySender();
+    connect(keySender, SIGNAL(error(const &QString)),
+            this, SLOT(keySenderError(const &QString)));
 }
 
 RemoteControl::~RemoteControl()
 {
-    // Empty default destructor
+    delete keySender;
 }
 
 void RemoteControl::handleClientConnected(const QString &name)
@@ -71,13 +74,20 @@ void RemoteControl::handleMessage(const QString& sender, const QString& message)
         QString command = document.object()["data"].toString();
         if (command == tr("nextSlide"))
         {
-            send_next();
+            keySender->sendNext();
         }
         else if (command == tr("prevSlide"))
         {
-            send_prev();
+            keySender->sendPrev();
         }
 
         emit keySent(sender, command);
     }
+}
+
+void RemoteControl::keySenderError(const QString& message)
+{
+    this->stopServer(); // Stop the server if we have errors to avoid confusion
+
+    emit error(QString("Key sender error: %1").arg(message));
 }

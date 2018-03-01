@@ -1,6 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Presenter. Server software to remote control a presentation.         *
- *  Copyright (C) 2017 Felix Wohlfrom                                    *
+ *  Copyright (C) 2017-2018 Felix Wohlfrom                               *
  *                                                                       *
  *  This program is free software: you can redistribute it and/or modify *
  *  it under the terms of the GNU General Public License as published by *
@@ -28,6 +28,11 @@
 #ifdef _WIN32
     #include <windows.h>
 
+    /**
+     * Will send a given key to the system
+     *
+     * @param key The key id to emit
+     */
     void send_key(int key)
     {
         // This structure will be used to create the keyboard
@@ -67,7 +72,15 @@
 
     int fdo;
 
-    void emit_key(int fd, int type, int code, int val)
+    /**
+     * Will write a given event to a given device.
+     *
+     * @param fd The file descriptor of the device to write to
+     * @param type The event type to send
+     * @param code The event code to use
+     * @param val The value to send
+     */
+    void send_event(int fd, int type, int code, int val)
     {
         struct input_event ie;
 
@@ -81,24 +94,37 @@
         write(fd, &ie, sizeof(ie));
     }
 
+    /**
+     * Will send a given key to the system
+     *
+     * @param key The key id to emit
+     */
     void send_key(int key)
     {
-        emit_key(fdo, EV_KEY, key, 1);
-        emit_key(fdo, EV_SYN, SYN_REPORT, 0);
-        emit_key(fdo, EV_KEY, key, 0);
-        emit_key(fdo, EV_SYN, SYN_REPORT, 0);
+        send_event(fdo, EV_KEY, key, 1);
+        send_event(fdo, EV_SYN, SYN_REPORT, 0);
+        send_event(fdo, EV_KEY, key, 0);
+        send_event(fdo, EV_SYN, SYN_REPORT, 0);
     }
-#endif // __linux__
 
-void init_keysender()
-{
-    #ifdef __linux__
+    void init_keysender()
+    {
+        char* filename = "/dev/uinput";
+
+        if (access(filename, F_OK) == -1)
+        {
+            filename = "/dev/input/uinput";
+        }
+
+        fdo = open(filename, O_WRONLY | O_NONBLOCK);
         struct uinput_user_dev uidev;
 
-        fdo = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
         if (fdo < 0)
         {
-            die("error: open on /dev/uinput");
+            char* msg = (char*) calloc(60,sizeof(char));
+            snprintf(msg, strlen(msg) * sizeof(char), "%s%s",
+                    "error: open on", filename);
+            die(msg);
         }
 
         if (ioctl(fdo, UI_SET_EVBIT, EV_KEY) < 0)
@@ -114,7 +140,8 @@ void init_keysender()
             die("error: ioctl: KEY_RIGHT");
         }
         memset(&uidev, 0, sizeof(uidev));
-        snprintf(uidev.name, UINPUT_MAX_NAME_SIZE, "slideChanger");
+        snprintf(uidev.name, UINPUT_MAX_NAME_SIZE,
+                "presenter_server_key_sender");
         uidev.id.bustype = BUS_USB;
         uidev.id.vendor  = 0x1;
         uidev.id.product = 0x1;
@@ -128,8 +155,18 @@ void init_keysender()
         {
             die("error: ioctl: UI_DEV_CREATE");
         }
-    #endif // __linux__
-}
+    }
+
+    void destroy_keysender()
+    {
+        if (ioctl(fdo, UI_DEV_DESTROY) < 0)
+        {
+            die("error: ioctl - UI_DEV_DESTROY");
+        }
+
+        close(fdo);
+    }
+#endif // __linux__
 
 void send_next()
 {
@@ -153,14 +190,3 @@ void send_prev()
     #endif // __linux__
 }
 
-void destroy_keysender()
-{
-    #ifdef __linux__
-        if (ioctl(fdo, UI_DEV_DESTROY) < 0)
-        {
-            die("error: ioctl - UI_DEV_DESTROY");
-        }
-
-        close(fdo);
-    #endif // __linux__
-}

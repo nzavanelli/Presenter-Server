@@ -98,11 +98,6 @@ class BluetoothConnector: public BluetoothConnectorBase
         QList<QBluetoothSocket*> clientSockets;
 
         /**
-         * If the key sender to the system has been initialized.
-         */
-        bool keySenderInitialized;
-
-        /**
          * Write a given message to the connected client.
          *
          * @param message The message to write.

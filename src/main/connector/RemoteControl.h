@@ -1,6 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Presenter. Server software to remote control a presentation.         *
- *  Copyright (C) 2017 Felix Wohlfrom                                    *
+ *  Copyright (C) 2017-2018 Felix Wohlfrom                               *
  *                                                                       *
  *  This program is free software: you can redistribute it and/or modify *
  *  it under the terms of the GNU General Public License as published by *
@@ -29,11 +29,25 @@
 #include <QObject>
 #include <QString>
 
+#include "KeySender.h"
+
+/**
+ * Base class for the remote control receiver.
+ * Provides a generic interface e.g. for bluetooth and network controls.
+ */
 class RemoteControl: public QObject
 {
     Q_OBJECT
 
     public:
+        /**
+         * Creates a new remote control.
+         */
+        RemoteControl();
+
+        /**
+         * Destroys the remote control.
+         */
         virtual ~RemoteControl();
 
         /**
@@ -70,6 +84,11 @@ class RemoteControl: public QObject
         virtual void write(const QString& message) = 0;
 
     private:
+        /**
+         * The key sender.
+         */
+        KeySender* keySender;
+
         /**
          * A not completely received message. A message is complete once
          * two consecutive new line characters are received.
@@ -125,6 +144,15 @@ class RemoteControl: public QObject
          * @param key The key that has been sent
          */
         void keySent(const QString &name, const QString &key);
+
+   private slots:
+        /**
+         * Handler for errors while using keysender. Will disconnect the
+         * server if error is received.
+         *
+         * @param message The error message.
+         */
+        void keySenderError(const QString &message);
 };
 
 #endif /* SRC_MAIN_CONNECTOR_REMOTECONTROL_H_ */
