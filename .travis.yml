@@ -1,5 +1,4 @@
 # The buildscript for travis ci verification
-# Execute on ubuntu xenial using docker
 language: c++
 
 sudo: required
@@ -7,13 +6,17 @@ sudo: required
 services:
   - docker
 
+env:
+  - DOCKER_IMG=ubuntu:16.04
+  - DOCKER_IMG=ubuntu:17.10
+
 before_install:
   # Run simple code style check as early as possible to fail as early as possible
   - ./check-code-style.sh
 
   # Now initialize the docker image
-  - docker pull ubuntu:17.10
-  - docker run -w /root --name test -d ubuntu:17.10 sleep infinity
+  - docker pull $DOCKER_IMG
+  - docker run -w /root --name test -d $DOCKER_IMG sleep infinity
   - docker cp . test:/root/
 
 install:
@@ -22,5 +25,5 @@ install:
 
 script:
   - docker exec -t test bash -ic "mkdir build"
-  - docker exec -t test bash -ic "cd build && cmake ../src && make"
+  - docker exec -t test bash -ic "cd build && cmake ../src && make -j"
   - docker exec -t test bash -ic "cd build && xvfb-run make test"
