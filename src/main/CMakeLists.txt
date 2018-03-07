@@ -28,3 +28,11 @@ endif(WIN32)
 source_group("Header Files" FILES Version.h)
 add_executable(${CMAKE_PROJECT_NAME} ${GUI_TYPE} ${RSRC} Main.cpp)
 target_link_libraries(${CMAKE_PROJECT_NAME} Gui)
+
+if(UNIX)
+    # Publish the runner script
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/main/res/scripts/presenter_server.sh
+                ${CMAKE_BINARY_DIR}/presenter_server.sh)
+endif(UNIX)
