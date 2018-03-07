@@ -62,7 +62,7 @@ endif(CMAKE_CXX_FLAGS_DEBUG)
 # Enable code coverage on linux
 if(UNIX)
     add_custom_target (coverage
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/coverage.sh
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/main/res/scripts/coverage.sh
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif(UNIX)
 
