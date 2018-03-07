@@ -98,4 +98,3 @@ void KeySender::sendPrev()
         }
     }
 #endif // __linux__
-

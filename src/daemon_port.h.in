@@ -6,4 +6,4 @@
  *
  * Port configuration for key sender daemon on linux
  */
- #define KEYSENDER_PORT @KEYSENDER_PORT@
+#define KEYSENDER_PORT @KEYSENDER_PORT@

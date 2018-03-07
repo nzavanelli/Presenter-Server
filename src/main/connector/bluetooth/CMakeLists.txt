@@ -16,7 +16,7 @@ endif(WIN32)
 if (UNIX)
     set(SOURCE ${SOURCE} BluetoothConnector_Linux.cpp)
     set(HEADERS ${HEADERS} BluetoothConnector_Linux.h)
-    
+
     find_package(Qt5Bluetooth REQUIRED)
 endif(UNIX)
 

@@ -189,4 +189,3 @@ void send_prev()
         send_key(KEY_LEFT);
     #endif // __linux__
 }
-

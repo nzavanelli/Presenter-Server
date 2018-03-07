@@ -8,6 +8,10 @@ services:
   - docker
 
 before_install:
+  # Run simple code style check as early as possible to fail as early as possible
+  - ./check-code-style.sh
+
+  # Now initialize the docker image
   - docker pull ubuntu:17.10
   - docker run -w /root --name test -d ubuntu:17.10 sleep infinity
   - docker cp . test:/root/
