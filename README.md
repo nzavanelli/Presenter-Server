@@ -48,7 +48,7 @@ As source folder, please select the [src](src) folder in this directory.
 
 ### How to Run
 #### Official releases
-If you downloaded the binaries from [the official releases](releases), simply unpack the binaries.
+If you downloaded the binaries from [the official releases](../../releases), simply unpack the binaries.
 On Windows just run the **Presenter_Server.exe** with a double click.
 For Linux you need to build it from [source](#how-to-build) for now.
 
