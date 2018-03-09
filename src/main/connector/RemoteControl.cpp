@@ -32,8 +32,8 @@
 RemoteControl::RemoteControl()
 {
     keySender = new KeySender();
-    connect(keySender, SIGNAL(error(const &QString)),
-            this, SLOT(keySenderError(const &QString)));
+    connect(keySender, SIGNAL(error(QString)),
+            this, SLOT(keySenderError(QString)));
 }
 
 RemoteControl::~RemoteControl()
