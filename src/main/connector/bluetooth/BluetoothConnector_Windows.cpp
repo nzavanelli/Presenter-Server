@@ -304,7 +304,8 @@ BluetoothReaderThread::BluetoothReaderThread(const SOCKET serverSocket) :
 void BluetoothReaderThread::stop()
 {
     // Close the connection
-    if (closesocket(clientSocket) == SOCKET_ERROR)
+    if (clientSocket != INVALID_SOCKET &&
+        closesocket(clientSocket) == SOCKET_ERROR)
     {
         emit error(QString("Could not close socket 0x%1. %2\n")
                 .arg((ULONG64)serverSocket, 16)
