@@ -19,10 +19,12 @@ endforeach(SUB)
 
 # Image resource files
 set(CMAKE_AUTORCC ON)
-set(RSRC res/images.qrc)
 if(WIN32)
-    set(RSRC "${RSRC}" res/images/msw/msw.rc)
+    set(RSRC res/images/images_win.qrc res/images/msw/msw.rc)
 endif(WIN32)
+if(UNIX)
+    set(RSRC res/images/images_linux.qrc)
+endif(UNIX)
 
 # Generate the main program
 source_group("Header Files" FILES Version.h)

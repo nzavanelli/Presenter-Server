@@ -1,7 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-    <qresource prefix="/">
-        <file alias="icon">images/msw/tray.ico</file>
-        <file alias="tray">images/tray.svg</file>
-    </qresource>
-</RCC>

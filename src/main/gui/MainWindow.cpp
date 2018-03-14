@@ -40,12 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     // Initialize system tray icon
-    #ifdef _WIN32
-        icon = new QIcon(":/icon");
-    #endif // _WIN32
-    #ifdef __linux__
-        icon = new QIcon(":/tray");
-    #endif // __linux__
+    icon = new QIcon(":/icon");
 
     // Initialize the logger window
     logger = new Logger(this);
@@ -92,7 +87,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(*icon);
     trayIcon->show();
 
-    // Set minimum witdh for info labels
+    // Set minimum width for info labels
     ui->bluetoothServerStatus->setMinimumWidth(
             ui->bluetoothServerStatus->fontMetrics()
                 .boundingRect(ui->bluetoothServerStatus->text())
