@@ -45,9 +45,6 @@ MainWindow::MainWindow(QWidget *parent) :
     // Initialize the logger window
     logger = new Logger(this);
 
-    // Quit button can not be connected in ui, since we don't have qApp there
-    connect(ui->action_Quit, SIGNAL(triggered()), qApp, SLOT(quit()));
-
     // The signals of our bt connector
     connect(btConnector, SIGNAL(info(QString)),
                     this, SLOT(info(QString)));
@@ -66,7 +63,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Create tray icon and context menu
     openAction = new QAction(tr("&Open"), this);
-    connect(openAction, SIGNAL(triggered()), this, SLOT(show()));
+    connect(openAction, SIGNAL(triggered()), this, SLOT(restore()));
     aboutAction = new QAction(tr("&About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(showAboutScreen()));
     quitAction = new QAction(tr("&Quit"), this);
@@ -104,6 +101,33 @@ MainWindow::~MainWindow()
     delete icon;
     delete logger;
     delete btConnector;
+}
+
+void MainWindow::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::WindowStateChange && isMinimized()
+        && QSystemTrayIcon::isSystemTrayAvailable() && trayIcon->isVisible())
+    {
+        if (trayIcon->supportsMessages())
+        {
+            trayIcon->showMessage(tr("Presenter"),
+                                 tr("The program will keep running in the "
+                                    "system tray. To terminate the program, "
+                                    "choose \"Quit\" in the context menu "
+                                    "of the system tray icon."));
+        }
+        else
+        {
+            QMessageBox::information(this, tr("Presenter"),
+                                 tr("The program will keep running in the "
+                                    "system tray. To terminate the program, "
+                                    "choose <b>Quit</b> in the context menu "
+                                    "of the system tray icon."));
+        }
+
+        hide();
+        event->ignore();
+    }
 }
 
 void MainWindow::info(const QString &message)
@@ -148,13 +172,13 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     if (reason == QSystemTrayIcon::Trigger)
     {
-        if (isVisible())
+        if (this->isVisible())
         {
-            hide();
+            this->hide();
         }
         else
         {
-            show();
+            this->show();
         }
     }
 }
@@ -169,38 +193,17 @@ void MainWindow::showLog()
 
 void MainWindow::showAboutScreen()
 {
+    // Don't close the main application if just the about window is shown from
+    // tray icon.
+    if (!this->isVisible())
+    {
+        QApplication::setQuitOnLastWindowClosed(false);
+    }
     AboutWindow(this).exec();
+    QApplication::setQuitOnLastWindowClosed(true);
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::restore()
 {
-    if (QSystemTrayIcon::isSystemTrayAvailable()
-            && trayIcon->isVisible())
-    {
-        if (trayIcon->supportsMessages())
-        {
-            trayIcon->showMessage(tr("Presenter"),
-                                 tr("The program will keep running in the "
-                                    "system tray. To terminate the program, "
-                                    "choose \"Quit\" in the context menu "
-                                    "of the system tray icon."));
-        }
-        else
-        {
-            QMessageBox::information(this, tr("Presenter"),
-                                 tr("The program will keep running in the "
-                                    "system tray. To terminate the program, "
-                                    "choose <b>Quit</b> in the context menu "
-                                    "of the system tray icon."));
-        }
-
-        hide();
-        event->ignore();
-
-    }
-    else
-    {
-        showMinimized();
-        event->ignore();
-    }
+    this->show();
 }

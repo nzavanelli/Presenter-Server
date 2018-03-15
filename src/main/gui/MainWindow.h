@@ -1,6 +1,6 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *  Presenter. Server software to remote control a presentation.         *
- *  Copyright (C) 2017 Felix Wohlfrom                                    *
+ *  Copyright (C) 2017-2018 Felix Wohlfrom                               *
  *                                                                       *
  *  This program is free software: you can redistribute it and/or modify *
  *  it under the terms of the GNU General Public License as published by *
@@ -60,11 +60,11 @@ class MainWindow : public QMainWindow
 
     protected:
         /**
-         * We need our own close event handler to minimize to system tray.
+         * Handler that minimizes the window to system tray.
          *
          * @param event The event
          */
-        void closeEvent(QCloseEvent *event);
+        void changeEvent(QEvent *event);
 
     private slots:
         /**
@@ -122,6 +122,8 @@ class MainWindow : public QMainWindow
          * Called on clicks on "info" menu item
          */
         void showAboutScreen();
+
+        void restore();
 
     private:
         /**
