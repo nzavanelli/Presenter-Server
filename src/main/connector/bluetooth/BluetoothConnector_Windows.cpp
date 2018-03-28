@@ -76,6 +76,8 @@ void BluetoothConnector::startServer()
     {
         emit error(QString("Could not open socket. %1\n")
                 .arg(getLastWSAError()));
+        emit error(tr("Make sure that bluetooth is available on your system "
+                "and enabled."));
         return;
     }
 
@@ -90,6 +92,8 @@ void BluetoothConnector::startServer()
     {
         emit error(QString("Could not bind to socket 0x%1. %2\n")
                 .arg((ULONG64)serverSocket, 16).arg(getLastWSAError()));
+        emit error(tr("Make sure that bluetooth is available on your system "
+                "and enabled."));
         return;
     }
 
