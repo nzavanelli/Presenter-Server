@@ -1,8 +1,8 @@
 # Project name and version
 project(Presenter_Server)
-set(VERSION_MAJOR 0)
-set(VERSION_MINOR 9)
-set(VERSION_BETA 1)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 0)
+set(VERSION_BETA 0)
 
 # The subdirectories to build
 set(SUBDIRS main test)
