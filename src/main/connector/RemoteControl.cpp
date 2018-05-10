@@ -80,6 +80,14 @@ void RemoteControl::handleMessage(const QString& sender, const QString& message)
         {
             keySender->sendPrev();
         }
+         else if (command == tr("endPres"))
+        {
+            keySender->endPres();
+        }
+         else if (command == tr("begin"))
+        {
+            keySender->begin();
+        }
 
         emit keySent(sender, command);
     }
