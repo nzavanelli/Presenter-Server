@@ -62,6 +62,15 @@ class KeySender: public QObject
          * Sends the key to switch to previous slide.
          */
         void sendPrev();
+         /**
+         * ends the presentation
+         */
+        void end_pres();
+
+        /**
+         * returns to the beginning
+         */
+        void begin();
 
         // FIXME: After dropping ubuntu 16.04 support, this can be moved into
         // the #ifdef __linux__ block
