@@ -47,4 +47,8 @@ void send_next();
  * Will send the "previous" key to the system.
  */
 void send_prev();
+
+void end_Pres();
+
+void begin();
 #endif /* SRC_MAIN_CONNECTOR_KEY_SENDER_H_ */
