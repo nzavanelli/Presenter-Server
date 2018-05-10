@@ -189,3 +189,23 @@ void send_prev()
         send_key(KEY_LEFT);
     #endif // __linux__
 }
+void end_Pres()
+{
+    #ifdef _WIN32
+        send_key(VK_ESCAPE);
+    #endif // _WIN32
+
+    #ifdef __linux__
+        send_key(KEY_ESCAPE);
+    #endif // __linux__
+}
+void begin()
+{
+    #ifdef _WIN32
+        send_key(VK_F5);
+    #endif // _WIN32
+
+    #ifdef __linux__
+        send_key(KEY_F5);
+    #endif // __linux__
+}
